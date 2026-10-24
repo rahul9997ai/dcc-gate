@@ -102,7 +102,33 @@
       return openWithKey(r.data).catch(function(e){ errorView("The app couldn't start (" + (e && e.message ? e.message : e) + "). Refresh the page; if it keeps happening, tell your administrator."); });
     }, function(e){ errorView("We couldn't reach the server. Check your connection and try again."); });
   }
+  /* A reset / invite link from our emails: ?token_hash=...&type=recovery. The token is only used when the person presses the button,
+     because email security scanners open links automatically and would otherwise use up the one-time token first. */
+  var LINK = (function(){ try { var q = new URLSearchParams(location.search); var h = q.get("token_hash"), t = q.get("type"); return h && /^(recovery|invite|magiclink)$/.test(t || "") ? { hash:h, type:t } : null; } catch (e) { return null; } })();
+  var LINK_ERR = /error_code=(otp_expired|access_denied)|error=access_denied/.test(String(location.hash) + String(location.search));
+  function clearUrl(){ try { history.replaceState(null, "", location.pathname); } catch (e) {} }
+  function linkView(err){
+    frame('<div class="axl-card axl-wait"><h2>Set your password</h2><p class="axl-sub">Press the button to set a password for your account.</p>' + (err ? '<div class="axl-err" role="alert" id="gErr"></div>' : '') +
+      '<button type="button" class="axl-btn" id="gLink">Continue</button></div>');
+    if (err) document.getElementById("gErr").textContent = err;
+    document.getElementById("gLink").onclick = function(){
+      var btn = this; btn.disabled = true; btn.textContent = "Checking…";
+      sb.auth.verifyOtp({ token_hash:LINK.hash, type:LINK.type }).then(function(r){
+        if (r.error) { clearUrl(); return loginView("That link has expired or was already used. Use “Forgot password?” to get a new one."); }
+        window.__DCC_RECOVERY = true; clearUrl();
+        try { sessionStorage.setItem("axiom_active", "1"); } catch (e) {}
+        return openApp();
+      }, function(){ linkView("We couldn't reach the server. Check your connection and try again."); });
+    };
+  }
   function start(){
+    if (!sb) return errorView("The sign-in service couldn't load. Check your connection and refresh.");
+    if (LINK) return linkView();
+    if (LINK_ERR) { clearUrl(); return loginView("That link has expired or was already used. Use “Forgot password?” to get a new one."); }
+    waitView("Restoring your secure session…");
+    return startSession();
+  }
+  function startSession(){
     if (!sb) return errorView("The sign-in service couldn't load. Check your connection and refresh.");
     waitView("Restoring your secure session…");
     /* "Remember me" unticked = the session lasts only until the browser is closed (same rule the app uses) */
