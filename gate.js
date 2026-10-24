@@ -13,36 +13,34 @@
   var box = document.getElementById("gate");
   var esc = function(t){ return String(t === undefined || t === null ? "" : t).replace(/[&<>"]/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]; }); };
 
-  function frame(inner){
-    var mark = ""; try { mark = window.mhMark ? window.mhMark({ label:"" }) : ""; } catch (e) {}
-    box.innerHTML = '<div class="g-box"><div class="g-brand">' + mark + '<div class="g-wm" role="img" aria-label="Mahan-EX"><span class="m">MAHAN</span><span class="d" aria-hidden="true"></span><span class="e">EX</span></div><div class="g-prod">Dealership Command</div></div>' + inner +
-      '<div class="g-foot">Mahan-EX Dealership Command</div></div>';
-  }
-  function waitView(msg){ frame('<div class="g-card g-wait"><div class="g-spin"></div><h2>Signing you in</h2><p class="g-sub" id="gMsg"></p></div>'); document.getElementById("gMsg").textContent = msg || "Restoring your secure session…"; }
+  /* The page is the app's own landing page (logo, headline, feature tiles) with the sign-in card in it. */
+  var benefits = '<div class="axl-ben"><div>' + axi("shield") + '<span>Secure<br>Access</span></div><div>' + axi("people") + '<span>Dealer<br>Focused</span></div><div>' + axi("bars") + '<span>Greater<br>Tomorrow</span></div></div>';
+  function frame(card){ box.innerHTML = axLanding(card); }
+  function waitView(msg){ frame('<div class="axl-card axl-wait"><div class="axl-spin"></div><h2>Signing you in</h2><p class="axl-sub" id="gMsg"></p></div>'); document.getElementById("gMsg").textContent = msg || "Restoring your secure session…"; }
   function errorView(msg){
-    frame('<div class="g-card"><h2>Couldn\'t open the app</h2><div class="g-err" id="gErr" role="alert"></div><button type="button" class="g-btn" id="gRetry">Try again</button></div>');
+    frame('<div class="axl-card"><h2>Couldn\'t open the app</h2><div class="axl-err" id="gErr" role="alert"></div><button type="button" class="axl-btn" id="gRetry">Try again</button></div>');
     document.getElementById("gErr").textContent = msg; document.getElementById("gRetry").onclick = function(){ start(); };
   }
   function loginView(err, ok){
     var remember = true; try { remember = localStorage.getItem("axiom_remember") !== "0"; } catch (e) {}
-    frame('<form class="g-card" id="gForm" novalidate><h2>Welcome Back</h2><p class="g-sub">Sign in to Dealership Command</p>' +
-      (err ? '<div class="g-err" role="alert" id="gErr"></div>' : '') + (ok ? '<div class="g-ok" role="status" id="gOk"></div>' : '') +
-      '<div class="g-field"><input type="text" id="gEmail" placeholder="Email or username" autocomplete="username" spellcheck="false" autocapitalize="none" aria-label="Email or username"></div>' +
-      '<div class="g-field"><input type="password" id="gPw" placeholder="Password" autocomplete="current-password" aria-label="Password"><button type="button" class="g-eye" id="gEye" aria-label="Show or hide the password">Show</button></div>' +
-      '<div class="g-row"><label class="g-check"><input type="checkbox" id="gRem" ' + (remember ? "checked" : "") + '> Remember me</label><button type="button" class="g-link" id="gForgot">Forgot password?</button></div>' +
-      '<button type="submit" class="g-btn" id="gGo">Sign In</button></form>');
+    frame('<form class="axl-card" id="gForm" novalidate><h2>Welcome Back</h2><p class="axl-sub">Sign in to Dealership Command</p>' +
+      (err ? '<div class="axl-err" role="alert" id="gErr"></div>' : '') + (ok ? '<div class="axl-ok" role="status" id="gOk"></div>' : '') +
+      '<div class="axl-field">' + axi("user") + '<input type="text" id="gEmail" placeholder="Email or username" autocomplete="username" spellcheck="false" autocapitalize="none" aria-label="Email or username"></div>' +
+      '<div class="axl-field">' + axi("lock") + '<input type="password" id="gPw" placeholder="Password" autocomplete="current-password" aria-label="Password"><button type="button" class="axl-eye" id="gEye" aria-label="Show or hide password">' + axi("eye") + '</button></div>' +
+      '<div class="axl-row"><label class="axl-check"><input type="checkbox" id="gRem" ' + (remember ? "checked" : "") + '><span class="bx"></span>Remember me</label><button type="button" class="axl-link" id="gForgot">Forgot password?</button></div>' +
+      '<button type="submit" class="axl-btn" id="gGo">Sign In</button>' + benefits + '</form>');
     if (err) document.getElementById("gErr").textContent = err; if (ok) document.getElementById("gOk").textContent = ok;
     var pw = document.getElementById("gPw");
-    document.getElementById("gEye").onclick = function(){ var show = pw.type === "password"; pw.type = show ? "text" : "password"; this.textContent = show ? "Hide" : "Show"; };
+    document.getElementById("gEye").onclick = function(){ pw.type = pw.type === "password" ? "text" : "password"; };
     document.getElementById("gForgot").onclick = function(){ forgotView(); };
     document.getElementById("gForm").onsubmit = function(ev){ ev.preventDefault(); doLogin(); };
     document.getElementById("gEmail").focus();
   }
   function forgotView(msg){
-    frame('<form class="g-card" id="gForm" novalidate><h2>Reset your password</h2><p class="g-sub">Enter your work email and we\'ll send you a reset link.</p>' + (msg ? '<div class="g-ok" role="status" id="gOk"></div>' : '') +
-      '<div class="g-field"><input type="text" id="gReset" placeholder="Email" autocomplete="email" spellcheck="false" autocapitalize="none" aria-label="Email"></div>' +
-      '<button type="submit" class="g-btn" id="gGo">Send reset link</button><p class="g-sub" style="margin:14px 0 0;font-size:12px">Salespeople: ask your manager to reset your password.</p>' +
-      '<div class="g-row" style="justify-content:center;margin:12px 0 0"><button type="button" class="g-link" id="gBack">Back to sign in</button></div></form>');
+    frame('<form class="axl-card" id="gForm" novalidate><h2>Reset your password</h2><p class="axl-sub">Enter your work email and we\'ll send you a reset link.</p>' + (msg ? '<div class="axl-ok" role="status" id="gOk"></div>' : '') +
+      '<div class="axl-field">' + axi("user") + '<input type="text" id="gReset" placeholder="Email" autocomplete="email" spellcheck="false" autocapitalize="none" aria-label="Email"></div>' +
+      '<button type="submit" class="axl-btn" id="gGo">Send reset link</button><p class="axl-sub" style="margin:14px 0 0;font-size:12px">Salespeople: ask your manager to reset your password.</p>' +
+      '<div class="axl-row" style="justify-content:center;margin:12px 0 0"><button type="button" class="axl-link" id="gBack">Back to sign in</button></div></form>');
     if (msg) document.getElementById("gOk").textContent = msg;
     document.getElementById("gBack").onclick = function(){ loginView(); };
     document.getElementById("gForm").onsubmit = function(ev){
@@ -82,7 +80,7 @@
     }).then(function(text){ return JSON.parse(text); });
   }
   function run(bundle){
-    var css = document.getElementById("gate-css"); if (css) css.remove();
+    ["gate-css", "gate-css2"].forEach(function(id){ var l = document.getElementById(id); if (l) l.remove(); });
     box.remove();
     window.__DCC_ASSETS = bundle.assets || {};
     (bundle.css || []).forEach(function(c){ var s = document.createElement("style"); s.setAttribute("data-src", c.name); s.textContent = c.text; document.head.appendChild(s); });
