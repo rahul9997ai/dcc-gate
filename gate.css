@@ -1,0 +1,32 @@
+/* The only thing the public sees: a sign-in box. The app itself arrives, encrypted, after a successful sign-in. */
+html,body{margin:0;padding:0}
+body{background:#070c14;font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:14px;color:#e9eff8;-webkit-font-smoothing:antialiased}
+#gate{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;overflow:auto;background:radial-gradient(900px 520px at 50% -10%,#16305f 0%,#0b1430 55%,#070c14 100%)}
+#gate .g-box{width:100%;max-width:400px}
+#gate .g-brand{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:22px;text-align:center}
+#gate .g-brand svg{width:96px;height:auto;filter:drop-shadow(0 8px 18px rgba(0,0,0,.45))}
+#gate .g-wm{display:inline-flex;align-items:baseline;font-family:"Sora",system-ui,sans-serif;font-weight:800;letter-spacing:.09em;line-height:1;font-size:30px}
+#gate .g-wm .m{background:linear-gradient(180deg,#fff 0%,#d4e1f7 42%,#4f6c9c 52%,#e7efff 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+#gate .g-wm .d{display:inline-block;width:.34em;height:.11em;margin:0 .1em 0 .02em;border-radius:.06em;align-self:center;transform:translateY(-.04em);background:linear-gradient(90deg,#ffd27a,#e3a52f)}
+#gate .g-wm .e{background:linear-gradient(180deg,#fff6d6 0%,#ffd27a 42%,#a6650a 53%,#ffe29a 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+#gate .g-prod{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#9fb2d6;font-weight:600}
+#gate .g-card{background:rgba(255,255,255,.97);color:#0b1b3a;border-radius:16px;padding:26px 24px;box-shadow:0 24px 60px rgba(0,0,0,.45)}
+#gate h2{margin:0 0 4px;font-size:21px;letter-spacing:-.01em}
+#gate .g-sub{margin:0 0 16px;color:#5a6b88;font-size:13px}
+#gate .g-err{background:#fdecea;color:#b42318;border-radius:10px;padding:9px 12px;font-size:13px;margin-bottom:12px}
+#gate .g-ok{background:#e7f6ef;color:#0a7546;border-radius:10px;padding:9px 12px;font-size:13px;margin-bottom:12px}
+#gate .g-field{position:relative;margin-bottom:12px}
+#gate .g-field input[type=text],#gate .g-field input[type=password],#gate .g-field input[type=email]{width:100%;box-sizing:border-box;border:1px solid #cfd8e6;border-radius:11px;padding:12px 44px 12px 14px;font:inherit;color:#0b1b3a;background:#f6f9fd}
+#gate .g-field input:focus{outline:2px solid #c9ddfb;border-color:#1a72e8;background:#fff}
+#gate .g-eye{position:absolute;right:6px;top:50%;transform:translateY(-50%);border:0;background:none;color:#5a6b88;cursor:pointer;padding:8px;font-size:12px;font-weight:600}
+#gate .g-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 16px;font-size:13px}
+#gate .g-check{display:flex;align-items:center;gap:8px;color:#33456a;cursor:pointer}
+#gate .g-link{color:#1a72e8;text-decoration:none;cursor:pointer;font-weight:600;background:none;border:0;font:inherit;padding:0}
+#gate .g-link:hover{text-decoration:underline}
+#gate .g-btn{width:100%;border:0;border-radius:11px;padding:13px 16px;font:inherit;font-weight:700;font-size:15px;color:#fff;background:linear-gradient(180deg,#2b86ff,#0a6cf0);cursor:pointer;box-shadow:0 8px 20px rgba(10,108,240,.35)}
+#gate .g-btn[disabled]{opacity:.6;cursor:wait}
+#gate .g-wait{text-align:center;padding:12px 0}
+#gate .g-spin{width:34px;height:34px;border-radius:50%;border:3px solid #dbe4f0;border-top-color:#0a6cf0;margin:0 auto 12px;animation:g-spin 0.9s linear infinite}
+@keyframes g-spin{to{transform:rotate(360deg)}}
+#gate .g-foot{margin-top:18px;text-align:center;font-size:11.5px;color:#8798ae}
+@media (prefers-reduced-motion:reduce){#gate .g-spin{animation:none}}
