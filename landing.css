@@ -181,3 +181,8 @@ button,input,select,textarea{font:inherit;color:inherit}
 .axl-mhmark svg{width:100%;height:auto;display:block;filter:drop-shadow(0 6px 14px rgba(10,30,70,.28))}
 .axl-bt{min-width:0}
 @media (max-width:900px){.axl-brand{flex-direction:column;text-align:center}.axl-mhmark{width:120px}}
+
+.cpf-queue .cpf-qlist{display:grid;gap:6px;margin:6px 0}
+.cpf-qi{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:10px;padding:7px 10px;background:var(--surface-2);font-size:13px}
+.cpf-qi span{color:var(--muted);margin-left:auto}
+.cpf-queue .btn{margin-top:6px}
